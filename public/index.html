@@ -71,6 +71,15 @@
       font-size: 0.9rem;
     }
 
+    .demo-badge {
+      background-color: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
     .nav-link {
       color: var(--text-secondary);
       text-decoration: none;
@@ -605,7 +614,11 @@
           return;
         }
         const user = await response.json();
-        document.getElementById('usernameDisplay').textContent = '@' + user.username;
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        usernameDisplay.innerHTML = '@' + user.username;
+        if (user.username === 'demo') {
+          usernameDisplay.innerHTML += '<span class="demo-badge">Demo Account</span>';
+        }
       } catch (error) {
         window.location.href = '/login';
       }

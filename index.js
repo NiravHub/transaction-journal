@@ -76,8 +76,26 @@ async function initDB() {
     }
 
     console.log('Database initialized');
+    await createDemoUser();
   } catch (err) {
     console.error('Error initializing database:', err);
+  }
+}
+
+// Create demo user if not exists
+async function createDemoUser() {
+  try {
+    const result = await pool.query('SELECT id FROM users WHERE username = $1', ['demo']);
+    if (result.rows.length === 0) {
+      const password_hash = await bcrypt.hash('demo123', 10);
+      await pool.query(
+        'INSERT INTO users (name, username, password_hash) VALUES ($1, $2, $3)',
+        ['Demo User', 'demo', password_hash]
+      );
+      console.log('Demo user created');
+    }
+  } catch (err) {
+    console.error('Error creating demo user:', err);
   }
 }
 

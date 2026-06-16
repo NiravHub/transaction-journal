@@ -108,6 +108,17 @@
       background-color: var(--accent-hover);
     }
 
+    .btn-demo {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .btn-demo:hover {
+      background-color: var(--border);
+    }
+
     .btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -158,6 +169,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary" id="submitBtn">Sign In</button>
+      <button type="button" class="btn btn-demo" id="demoBtn">Login as Demo User</button>
     </form>
 
     <p class="register-link">
@@ -169,6 +181,14 @@
     const form = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
     const submitBtn = document.getElementById('submitBtn');
+    const demoBtn = document.getElementById('demoBtn');
+
+    // Demo login button
+    demoBtn.addEventListener('click', async () => {
+      document.getElementById('username').value = 'demo';
+      document.getElementById('password').value = 'demo123';
+      form.dispatchEvent(new Event('submit'));
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
