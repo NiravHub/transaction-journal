@@ -9,6 +9,7 @@ const path = require('path');
 const stream = require('stream');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Configure Cloudinary
 cloudinary.config({
