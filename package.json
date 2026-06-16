@@ -1,0 +1,18 @@
+{
+  "name": "transaction-journal",
+  "version": "1.0.0",
+  "description": "Personal transaction journal web app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "cloudinary": "^2.0.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "bcrypt": "^5.1.1",
+    "multer": "^1.4.5-lts.1"
+  }
+}

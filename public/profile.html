@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Transaction Journal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0f0f0f;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #252525;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #22c55e;
+      --border: #333333;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      background-color: var(--bg-secondary);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .nav-link:hover {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .profile-card {
+      background-color: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .profile-info h2 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .profile-info .username {
+      color: var(--text-secondary);
+    }
+
+    .profile-field {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-field:last-child {
+      border-bottom: none;
+    }
+
+    .field-label {
+      color: var(--text-secondary);
+    }
+
+    .field-value {
+      font-weight: 500;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-card {
+      background-color: var(--bg-tertiary);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .stat-card.success .stat-value {
+      color: var(--success);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>My Profile</h1>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Transactions</a>
+        <a href="#" class="nav-link" id="logoutBtn">Logout</a>
+      </div>
+    </header>
+
+    <div id="profileContent">
+      <div class="loading">Loading profile...</div>
+    </div>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const content = document.getElementById('profileContent');
+
+      try {
+        const response = await fetch('/api/auth/profile');
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = '/login';
+            return;
+          }
+          throw new Error('Failed to load profile');
+        }
+
+        const data = await response.json();
+        const { user, stats } = data;
+
+        const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+        content.innerHTML = `
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="avatar">${initials}</div>
+              <div class="profile-info">
+                <h2>${escapeHtml(user.name)}</h2>
+                <div class="username">@${escapeHtml(user.username)}</div>
+              </div>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Name</span>
+              <span class="field-value">${escapeHtml(user.name)}</span>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Username</span>
+              <span class="field-value">${escapeHtml(user.username)}</span>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Member Since</span>
+              <span class="field-value">${formatDate(user.created_at)}</span>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value">${stats.transactionCount}</div>
+                <div class="stat-label">Transactions</div>
+              </div>
+              <div class="stat-card success">
+                <div class="stat-value">$${stats.totalSpent.toFixed(2)}</div>
+                <div class="stat-label">Total Spent</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        content.innerHTML = `<div class="loading">Error loading profile. <a href="/">Go back</a></div>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        window.location.href = '/login';
+      } catch (err) {
+        console.error('Logout failed:', err);
+      }
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>
