@@ -88,7 +88,7 @@ async function initDB() {
 async function createDemoUser() {
   try {
     const password_hash = await bcrypt.hash('Demo@Journal2026', 10);
-    const result = await pool.query('SELECT id FROM users WHERE username = $1', ['demo']);
+    const result = await pool.query('SELECT id FROM users WHERE username = ₹1', ['demo']);
     if (result.rows.length === 0) {
       await pool.query(
         'INSERT INTO users (name, username, password_hash) VALUES ($1, $2, $3)',
