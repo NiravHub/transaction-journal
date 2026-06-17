@@ -26,6 +26,9 @@
       --success: #22c55e;
       --border: #333333;
       --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --glass-bg: rgba(26, 26, 26, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     body {
@@ -45,12 +48,15 @@
     }
 
     .register-container {
-      background-color: var(--bg-secondary);
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       padding: 40px;
-      border-radius: 16px;
+      border-radius: 20px;
       width: 100%;
       max-width: 400px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--glass-shadow);
+      border: 1px solid var(--glass-border);
     }
 
     .register-container h1 {
@@ -88,17 +94,18 @@
     .form-group input {
       width: 100%;
       padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background-color: var(--bg-tertiary);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      background-color: rgba(37, 37, 37, 0.6);
       color: var(--text-primary);
       font-size: 1rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.2s;
     }
 
     .form-group input:focus {
       border-color: var(--accent);
+      background-color: rgba(37, 37, 37, 0.8);
     }
 
     .form-group .hint {
@@ -111,7 +118,7 @@
       width: 100%;
       padding: 14px;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       font-size: 1rem;
       font-weight: 500;
@@ -137,11 +144,11 @@
     }
 
     .error-message {
-      background-color: rgba(239, 68, 68, 0.1);
-      border: 1px solid var(--error);
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.5);
       color: var(--error);
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 20px;
       display: none;
     }
@@ -159,6 +166,13 @@
 
     .login-link a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .register-container {
+        padding: 28px;
+        border-radius: 16px;
+      }
     }
   </style>
 </head>
