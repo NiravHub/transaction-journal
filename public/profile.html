@@ -25,15 +25,11 @@
       --success: #22c55e;
       --border: #333333;
       --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      --glass-bg: rgba(26, 26, 26, 0.7);
-      --glass-bg-light: rgba(37, 37, 37, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-primary);
+      background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 40%, #0a0a0f 70%, #000000 100%);
       color: var(--text-primary);
       line-height: 1.6;
       min-height: 100vh;
@@ -50,17 +46,17 @@
     }
 
     header {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
-      box-shadow: var(--glass-shadow);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid var(--glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     header h1 {
@@ -96,13 +92,13 @@
     }
 
     .profile-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 20px;
       padding: 24px;
-      box-shadow: var(--glass-shadow);
-      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .profile-header {
@@ -162,11 +158,11 @@
     }
 
     .stat-card {
-      background-color: var(--glass-bg-light);
+      background-color: rgba(255, 255, 255, 0.05);
       border-radius: 16px;
       padding: 20px;
       text-align: center;
-      border: 1px solid var(--glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .stat-value {

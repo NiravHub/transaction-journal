@@ -32,15 +32,11 @@
       --paytm-color: #06b6d4;
       --bhim-color: #f97316;
       --other-color: #6b7280;
-      --glass-bg: rgba(26, 26, 26, 0.7);
-      --glass-bg-light: rgba(37, 37, 37, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-primary);
+      background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f1a 40%, #0a0a0f 70%, #000000 100%);
       color: var(--text-primary);
       line-height: 1.6;
       min-height: 100vh;
@@ -57,14 +53,14 @@
     }
 
     header {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
-      box-shadow: var(--glass-shadow);
-      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .header-top {
@@ -145,13 +141,13 @@
       position: absolute;
       right: 0;
       top: 100%;
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       min-width: 160px;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
       z-index: 100;
       overflow: hidden;
     }
@@ -199,9 +195,9 @@
       flex: 1;
       min-width: 200px;
       padding: 12px 16px;
-      border: 1px solid var(--glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      background-color: var(--glass-bg-light);
+      background-color: rgba(255, 255, 255, 0.05);
       color: var(--text-primary);
       font-size: 1rem;
       outline: none;
@@ -210,7 +206,7 @@
 
     .search-input:focus {
       border-color: var(--accent);
-      background-color: rgba(37, 37, 37, 0.8);
+      background-color: rgba(255, 255, 255, 0.08);
     }
 
     .btn {
@@ -262,15 +258,15 @@
     }
 
     .transaction-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
       padding: 18px;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      box-shadow: var(--glass-shadow);
-      border: 1px solid transparent;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .transaction-card:hover {
@@ -368,7 +364,7 @@
     }
 
     .modal {
-      background: var(--glass-bg);
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 20px;
@@ -377,8 +373,8 @@
       max-height: calc(100vh - 40px);
       overflow-y: auto;
       position: relative;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .modal-header {
@@ -427,9 +423,9 @@
     .form-group select {
       width: 100%;
       padding: 12px;
-      border: 1px solid var(--glass-border);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      background-color: var(--glass-bg-light);
+      background-color: rgba(255, 255, 255, 0.05);
       color: var(--text-primary);
       font-size: 1rem;
       font-family: inherit;
@@ -441,7 +437,7 @@
     .form-group select:focus {
       outline: none;
       border-color: var(--accent);
-      background-color: rgba(37, 37, 37, 0.8);
+      background-color: rgba(255, 255, 255, 0.08);
     }
 
     .form-group textarea {
