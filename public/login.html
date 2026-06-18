@@ -28,20 +28,43 @@
     }
 
     body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: 
-    radial-gradient(circle at 15% 20%, rgba(99, 60, 220, 0.35) 0%, transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(30, 100, 220, 0.3) 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(220, 60, 150, 0.15) 0%, transparent 50%),
-    #08080c;
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(99, 60, 220, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(30, 100, 220, 0.3) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(220, 60, 150, 0.15) 0%, transparent 50%),
+        #08080c;
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+    }
+
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
     h1, h2, h3 {
       font-family: 'Poppins', sans-serif;
