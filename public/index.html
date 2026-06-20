@@ -168,7 +168,15 @@
   z-index: 9999;
   margin-top: 8px;
 }
-
+@media (max-width: 768px) {
+  .settings-dropdown {
+    position: fixed;
+    top: auto;
+    right: 16px;
+    left: auto;
+    margin-top: 8px;
+  }
+}
     .settings-dropdown.show {
       display: block;
     }
