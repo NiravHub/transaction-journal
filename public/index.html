@@ -74,12 +74,18 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
+    @media (max-width: 768px) {
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
 
     .header-title {
       display: flex;
@@ -148,20 +154,20 @@
     }
 
     .settings-dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      min-width: 160px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      overflow: hidden;
-    }
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 160px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  margin-top: 8px;
+}
 
     .settings-dropdown.show {
       display: block;
