@@ -132,8 +132,8 @@
     .settings-wrapper {
   position: relative;
   z-index: 10000;
+  display: inline-flex;
 }
-
     .settings-btn {
       background: none;
       border: none;
@@ -157,21 +157,26 @@
       height: 20px;
     }
 
-  .settings-dropdown {
+    .settings-dropdown {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 8px);
   right: 0;
   width: 200px;
-  background: rgba(25,25,35,0.95);
+  background: rgba(25, 25, 35, 0.95);
   backdrop-filter: blur(20px);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   z-index: 99999;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.25s ease;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .settings-dropdown.show {
@@ -180,23 +185,27 @@
   transform: translateY(0);
 }
 
-    .settings-item {
-      display: block;
-      padding: 12px 16px;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: background-color 0.2s;
-      cursor: pointer;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-    }
+.settings-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: background-color 0.15s;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
 
-    .settings-item:hover {
-      background-color: rgba(59, 130, 246, 0.2);
-    }
+.settings-item:hover {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
 
     .settings-item.disabled {
       color: var(--text-secondary);
@@ -204,10 +213,10 @@
     }
 
     .settings-divider {
-      height: 1px;
-      background-color: var(--glass-border);
-      margin: 4px 0;
-    }
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 4px 0;
+}
 
     .search-bar {
       display: flex;
