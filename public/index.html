@@ -875,7 +875,8 @@
         }
         const user = await response.json();
         const usernameDisplay = document.getElementById('usernameDisplay');
-        usernameDisplay.innerHTML = '@' + user.username;
+        const displayName = user.username.includes('@') ? user.username.split('@')[0] : user.username;
+usernameDisplay.innerHTML = '@' + displayName;
         if (user.username === 'demo') {
           usernameDisplay.innerHTML += '<span class="demo-badge">Demo Account</span>';
         }
