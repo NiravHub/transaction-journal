@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
@@ -34,6 +36,9 @@ const upload = multer({
     }
   }
 });
+
+//temp
+console.log(process.env.DATABASE_URL);
 
 // Initialize PostgreSQL connection
 const pool = new Pool({

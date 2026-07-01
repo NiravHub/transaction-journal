@@ -8,6 +8,81 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    .custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.custom-select-trigger:hover,
+.custom-select-trigger.open {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.custom-select-options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: rgba(25, 25, 35, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  z-index: 9999;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.custom-select-options.open {
+  display: block;
+}
+
+.custom-option {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+
+.custom-option:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.custom-option.selected {
+  color: var(--accent);
+}
+    .month-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.month-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 4px;
+}
     * {
       margin: 0;
       padding: 0;
@@ -57,46 +132,31 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 16px;
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
     }
 
-    header {
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      padding: 20px;
-      border-radius: 20px;
-      margin-bottom: 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-      position: relative;
-      overflow: visible;
-    }
-
-    @media (max-width: 768px) {
-      .header-right {
-        width: 100%;
-        justify-content: space-between;
-      }
-    }
-
-    .header-title {
       display: flex;
       flex-direction: column;
+      padding: 24px 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 200;
     }
 
-    header h1 {
-      font-size: 1.5rem;
+    .sidebar-brand h1 {
+      font-size: 1.25rem;
       color: var(--text-primary);
       font-weight: 600;
     }
@@ -107,17 +167,104 @@
       opacity: 0.55;
       margin-top: 2px;
       font-weight: 400;
+      display: block;
     }
 
-    .header-right {
+    .sidebar-nav {
       display: flex;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 32px;
     }
 
-    .username-display {
+    .sidebar-nav-item {
+      display: block;
+      padding: 12px 16px;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: background-color 0.2s, color 0.2s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .sidebar-nav-item:hover {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: var(--text-primary);
+    }
+
+    .sidebar-nav-item.active {
+      background-color: rgba(59, 130, 246, 0.25);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .sidebar-spacer {
+      flex: 1;
+    }
+
+    .sidebar-signout {
+      margin-top: 16px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 250;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-menu-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 24px;
+      width: calc(100% - 260px);
+    }
+
+    .main-content-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .content-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 20px;
+      min-height: 44px;
+    }
+
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
     }
 
     .demo-badge {
@@ -129,94 +276,147 @@
       margin-left: 8px;
     }
 
-    .settings-wrapper {
-  position: relative;
-  z-index: 10000;
-  display: inline-flex;
-}
-    .settings-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 6px;
-      transition: background-color 0.2s, color 0.2s;
+    .profile-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 600;
     }
 
-    .settings-btn:hover {
-      background-color: var(--bg-tertiary);
+    .profile-info h2 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .profile-info .username {
+      color: var(--text-secondary);
+    }
+
+    .profile-field {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-field:last-child {
+      border-bottom: none;
+    }
+
+    .field-label {
+      color: var(--text-secondary);
+    }
+
+    .field-value {
+      font-weight: 500;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-card {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .stat-card.success .stat-value {
+      color: var(--success);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .content-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .content-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
       color: var(--text-primary);
     }
 
-    .settings-btn svg {
-      width: 20px;
-      height: 20px;
+    .content-card h3 {
+      font-size: 1.2rem;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: var(--text-primary);
     }
 
-    .settings-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: 200px;
-  background: rgba(25, 25, 35, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  z-index: 99999;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.settings-dropdown.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.settings-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 12px;
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  border-radius: 8px;
-  transition: background-color 0.15s;
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  font-family: inherit;
-}
-
-.settings-item:hover {
-  background-color: rgba(59, 130, 246, 0.15);
-}
-
-
-    .settings-item.disabled {
+    .content-card p {
       color: var(--text-secondary);
-      opacity: 0.6;
+      margin-bottom: 12px;
     }
 
-    .settings-divider {
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.1);
-  margin: 4px 0;
-}
+    .content-card ul,
+    .content-card ol {
+      color: var(--text-secondary);
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    .content-card ul li,
+    .content-card ol li {
+      margin-bottom: 8px;
+    }
+
+    .signature {
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 24px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 24px 0;
+    }
 
     .search-bar {
       display: flex;
@@ -285,10 +485,11 @@
     }
 
     .transactions-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
 
     .transaction-card {
       background: rgba(255, 255, 255, 0.05);
@@ -612,15 +813,45 @@
     }
 
     /* Responsive */
-    @media (max-width: 600px) {
-      .container {
-        padding: 12px;
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
       }
 
-      header {
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 150;
+      }
+
+      .sidebar-overlay.active {
+        display: block;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .main-content {
+        margin-left: 0;
+        width: 100%;
         padding: 16px;
+        padding-top: 64px;
       }
 
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
       .search-bar {
         flex-direction: column;
       }
@@ -706,40 +937,99 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="header-top">
-        <div class="header-title">
-          <h1>Transaction Journal</h1>
-          <span class="branding-credit">By Nirav</span>
-        </div>
-        <div class="header-right">
-          <span class="username-display" id="usernameDisplay"></span>
-          <div class="settings-wrapper">
-            <button class="settings-btn" id="settingsBtn" aria-label="Settings">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </button>
-            <div class="settings-dropdown" id="settingsDropdown">
-              <a href="/about" class="settings-item">About</a>
-              <a href="/profile" class="settings-item">Profile</a>
-              <div class="settings-divider"></div>
-              <button class="settings-item" id="logoutBtn">Logout</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="search-bar">
-        <input type="text" class="search-input" id="searchInput" placeholder="Search by title, notes, location...">
-        <button class="btn btn-primary" id="addBtn">+ Add Transaction</button>
-      </div>
-    </header>
+  <div class="app-layout">
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <div class="transactions-list" id="transactionsList">
-      <div class="loading">Loading transactions...</div>
-    </div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <h1>Transaction Journal</h1>
+        <span class="branding-credit">By Nirav</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/about" class="sidebar-nav-item" data-page="about">About</a>
+        <a href="/transactions" class="sidebar-nav-item" data-page="transactions">Transactions</a>
+        <a href="/profile" class="sidebar-nav-item" data-page="profile">Profile</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <button class="sidebar-nav-item sidebar-signout" id="logoutBtn">Sign Out</button>
+    </aside>
+
+    <main class="main-content">
+      <div class="main-content-inner">
+        <div class="content-toolbar">
+          <button class="btn btn-primary" id="addBtn" style="display: none;">+ Add Transaction</button>
+        </div>
+
+        <section id="page-profile" class="page-section">
+          <div id="profileContent">
+            <div class="loading">Loading profile...</div>
+          </div>
+        </section>
+
+        <section id="page-transactions" class="page-section">
+          <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by title, notes, location...">
+          </div>
+          <div class="transactions-list" id="transactionsList">
+            <div class="loading">Loading transactions...</div>
+          </div>
+        </section>
+
+        <section id="page-about" class="page-section">
+          <div class="content-card">
+            <h2>About Transaction Journal</h2>
+            <p>Transaction Journal helps you keep track of your daily transactions in one place.</p>
+            <p>Instead of searching through screenshots, bank statements, or payment apps, you can save:</p>
+            <ul>
+              <li>Transaction amount</li>
+              <li>Date & time</li>
+              <li>Payment method</li>
+              <li>Location</li>
+              <li>Notes</li>
+              <li>Receipt screenshots</li>
+            </ul>
+            <p>The goal is simple: make it easy to remember where, when, and why a payment was made.</p>
+
+            <div class="section-divider"></div>
+
+            <h3>Features</h3>
+            <ul>
+              <li>Save transaction details</li>
+              <li>Upload payment screenshots</li>
+              <li>Search transactions</li>
+              <li>Track payment methods</li>
+              <li>Access records from any device</li>
+              <li>Secure user accounts</li>
+            </ul>
+
+            <div class="section-divider"></div>
+
+            <h3>Why I Built This</h3>
+            <p>Many payments are forgotten after a few days. I wanted a simple way to store transaction information along with notes and receipts so everything stays organized.</p>
+            <p class="signature">Built by Nirav</p>
+
+            <div class="section-divider"></div>
+
+            <h3>How to Add a Transaction</h3>
+            <ol>
+              <li>Click on + Add Transaction</li>
+              <li>Enter a transaction title & amount.</li>
+              <li>Select the date and time.</li>
+              <li>Choose the payment method.</li>
+              <li>Enter the location (optional) & Add notes (optional).</li>
+              <li>Upload a receipt or payment screenshot (optional).</li>
+              <li>Click Save Transaction.</li>
+              <li>Your transaction will appear in the dashboard and can be searched later.</li>
+            </ol>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
 
   <!-- Add/Edit Transaction Modal -->
@@ -767,15 +1057,23 @@
           </div>
 
           <div class="form-group">
-            <label for="payment_method">Payment Method *</label>
-            <select id="payment_method" required>
-              <option value="">Select payment method</option>
-              <option value="GPay">GPay</option>
-              <option value="PhonePe">PhonePe</option>
-              <option value="Paytm">Paytm</option>
-              <option value="BHIM">BHIM</option>
-              <option value="Other">Other</option>
-            </select>
+            <label>Payment Method *</label>
+            <div class="custom-select-wrapper">
+              <div class="custom-select-trigger" id="paymentTrigger">
+                <span id="paymentSelected">Select payment method</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+              <div class="custom-select-options" id="paymentOptions">
+                <div class="custom-option" data-value="GPay">GPay</div>
+                <div class="custom-option" data-value="Pay UPI">Pay UPI</div>
+                <div class="custom-option" data-value="Paytm">Paytm</div>
+                <div class="custom-option" data-value="BHIM">BHIM</div>
+                <div class="custom-option" data-value="Other">Other</div>
+              </div>
+              <input type="hidden" id="payment_method" required>
+            </div>
           </div>
 
           <div class="form-group" id="other_payment_group" style="display: none;">
@@ -849,6 +1147,50 @@
     const otherPaymentMethod = document.getElementById('other_payment_method');
     const modalTitle = document.getElementById('modalTitle');
     const submitBtn = document.querySelector('#transactionForm button[type="submit"]');
+    // Custom payment method dropdown
+const paymentTrigger = document.getElementById('paymentTrigger');
+const paymentOptions = document.getElementById('paymentOptions');
+const paymentSelected = document.getElementById('paymentSelected');
+const paymentInput = document.getElementById('payment_method');
+
+paymentTrigger.addEventListener('click', (e) => {
+  e.stopPropagation();
+  paymentTrigger.classList.toggle('open');
+  paymentOptions.classList.toggle('open');
+});
+
+document.querySelectorAll('.custom-option').forEach(option => {
+  option.addEventListener('click', () => {
+    const value = option.dataset.value;
+    paymentInput.value = value;
+    paymentSelected.textContent = value;
+    paymentSelected.style.color = 'var(--text-primary)';
+    paymentTrigger.classList.remove('open');
+    paymentOptions.classList.remove('open');
+
+    // Remove selected class from all, add to current
+    document.querySelectorAll('.custom-option').forEach(o => 
+      o.classList.remove('selected'));
+    option.classList.add('selected');
+
+    // Handle "Other" field visibility
+    if (value === 'Other') {
+      otherPaymentGroup.style.display = 'block';
+      otherPaymentMethod.required = true;
+    } else {
+      otherPaymentGroup.style.display = 'none';
+      otherPaymentMethod.required = false;
+      otherPaymentMethod.value = '';
+    }
+    formHasChanges = true;
+  });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', () => {
+  paymentTrigger.classList.remove('open');
+  paymentOptions.classList.remove('open');
+});
 
     let transactions = [];
     let searchTimeout = null;
@@ -856,28 +1198,161 @@
     let formHasChanges = false;
     let isSaving = false;
 
+    const PAGE_TITLES = {
+      profile: 'Profile - Transaction Journal',
+      transactions: 'Transactions - Transaction Journal',
+      about: 'About - Transaction Journal'
+    };
+
+    const ROUTE_MAP = {
+      '/': 'profile',
+      '/profile': 'profile',
+      '/transactions': 'transactions',
+      '/about': 'about'
+    };
+
+    let currentPage = null;
+
     // Initialize
     document.addEventListener('DOMContentLoaded', async () => {
       await checkAuth();
       setDefaultDateTime();
-      fetchTransactions();
-      setupSettingsDropdown();
+      setupNavigation();
+      setupMobileMenu();
+      showPage(getPageFromPath());
     });
 
-    // Setup settings dropdown
-    function setupSettingsDropdown() {
-      const settingsBtn = document.getElementById('settingsBtn');
-      const settingsDropdown = document.getElementById('settingsDropdown');
+    function getPageFromPath() {
+      return ROUTE_MAP[window.location.pathname] || 'profile';
+    }
 
-      settingsBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        settingsDropdown.classList.toggle('show');
+    function setupNavigation() {
+      document.querySelectorAll('.sidebar-nav-item[data-page]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          navigateTo(link.dataset.page);
+        });
       });
 
-      document.addEventListener('click', (e) => {
-        if (!settingsDropdown.contains(e.target) && e.target !== settingsBtn) {
-          settingsDropdown.classList.remove('show');
+      window.addEventListener('popstate', () => {
+        showPage(getPageFromPath());
+      });
+    }
+
+    function setupMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const menuBtn = document.getElementById('mobileMenuBtn');
+
+      menuBtn.addEventListener('click', () => {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+      });
+
+      overlay.addEventListener('click', closeMobileMenu);
+    }
+
+    function closeMobileMenu() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
+    function navigateTo(page) {
+      const path = page === 'profile' ? '/profile' : '/' + page;
+      history.pushState({ page }, '', path);
+      showPage(page);
+    }
+
+    function showPage(page) {
+      currentPage = page;
+
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById('page-' + page).classList.add('active');
+
+      document.querySelectorAll('.sidebar-nav-item[data-page]').forEach(link => {
+        link.classList.toggle('active', link.dataset.page === page);
+      });
+
+      addBtn.style.display = (page === 'profile' || page === 'transactions') ? '' : 'none';
+      document.title = PAGE_TITLES[page] || 'Transaction Journal';
+
+      closeMobileMenu();
+
+      if (page === 'profile') {
+        loadProfile();
+      } else if (page === 'transactions') {
+        fetchTransactions(searchInput.value);
+      }
+    }
+
+    async function loadProfile() {
+      const content = document.getElementById('profileContent');
+
+      try {
+        const response = await fetch('/api/auth/profile');
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = '/login';
+            return;
+          }
+          throw new Error('Failed to load profile');
         }
+
+        const data = await response.json();
+        const { user, stats } = data;
+        const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+
+        content.innerHTML = `
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="avatar">${initials}</div>
+              <div class="profile-info">
+                <h2>${escapeHtml(user.name)}</h2>
+                <div class="username">@${escapeHtml(user.username)}${user.username === 'demo' ? '<span class="demo-badge">Demo Account</span>' : ''}</div>
+              </div>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Name</span>
+              <span class="field-value">${escapeHtml(user.name)}</span>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Username</span>
+              <span class="field-value">${escapeHtml(user.username)}</span>
+            </div>
+
+            <div class="profile-field">
+              <span class="field-label">Member Since</span>
+              <span class="field-value">${formatProfileDate(user.created_at)}</span>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value">${stats.transactionCount}</div>
+                <div class="stat-label">Transactions</div>
+              </div>
+              <div class="stat-card success">
+                <div class="stat-value">₹${stats.totalSpent.toFixed(2)}</div>
+                <div class="stat-label">Total Spent</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        content.innerHTML = '<div class="loading">Error loading profile.</div>';
+      }
+    }
+
+    function formatProfileDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
     }
 
@@ -888,13 +1363,6 @@
         if (!response.ok) {
           window.location.href = '/login';
           return;
-        }
-        const user = await response.json();
-        const usernameDisplay = document.getElementById('usernameDisplay');
-        const displayName = user.username.includes('@') ? user.username.split('@')[0] : user.username;
-usernameDisplay.innerHTML = '@' + displayName;
-        if (user.username === 'demo') {
-          usernameDisplay.innerHTML += '<span class="demo-badge">Demo Account</span>';
         }
       } catch (error) {
         window.location.href = '/login';
@@ -945,17 +1413,32 @@ usernameDisplay.innerHTML = '@' + displayName;
 
     // Render transactions list
     function renderTransactions() {
-      if (transactions.length === 0) {
-        transactionsList.innerHTML = `
-          <div class="empty-state">
-            <h2>No transactions yet</h2>
-            <p>Click "Add Transaction" to get started</p>
-          </div>
-        `;
-        return;
-      }
+  if (transactions.length === 0) {
+    transactionsList.innerHTML = `
+      <div class="empty-state">
+        <h2>No transactions yet</h2>
+        <p>Click "Add Transaction" to get started</p>
+      </div>
+    `;
+    return;
+  }
 
-      transactionsList.innerHTML = transactions.map(t => `
+  // Group transactions by month
+  const groups = {};
+  transactions.forEach(t => {
+    const date = new Date(t.datetime);
+    const key = date.toLocaleDateString('en-IN', { 
+      month: 'long', 
+      year: 'numeric' 
+    });
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(t);
+  });
+
+  transactionsList.innerHTML = Object.entries(groups).map(([month, txns]) => `
+    <div class="month-group">
+      <div class="month-heading">${month}</div>
+      ${txns.map(t => `
         <div class="transaction-card" data-id="${t.id}">
           <div class="transaction-header">
             <div class="transaction-title">${escapeHtml(t.title)}</div>
@@ -968,13 +1451,15 @@ usernameDisplay.innerHTML = '@' + displayName;
             ${t.image_url ? '<span class="has-image">Has Image</span>' : ''}
           </div>
         </div>
-      `).join('');
+      `).join('')}
+    </div>
+  `).join('');
 
-      // Add click handlers
-      document.querySelectorAll('.transaction-card').forEach(card => {
-        card.addEventListener('click', () => showTransactionDetail(card.dataset.id));
-      });
-    }
+  // Re-attach click handlers
+  document.querySelectorAll('.transaction-card').forEach(card => {
+    card.addEventListener('click', () => showTransactionDetail(card.dataset.id));
+  });
+}
 
     // Format amount with currency
     function formatAmount(amount) {
@@ -1147,6 +1632,7 @@ usernameDisplay.innerHTML = '@' + displayName;
           formHasChanges = false;
           closeModal(formModal);
           fetchTransactions(searchInput.value);
+          if (currentPage === 'profile') loadProfile();
           showToast('Transaction saved successfully', 'success');
         } else if (response.status === 401) {
           window.location.href = '/login';
@@ -1302,6 +1788,7 @@ usernameDisplay.innerHTML = '@' + displayName;
         if (response.ok) {
           closeModal(detailModal);
           fetchTransactions(searchInput.value);
+          if (currentPage === 'profile') loadProfile();
           showToast('Transaction deleted successfully', 'success');
         } else if (response.status === 401) {
           window.location.href = '/login';
