@@ -451,6 +451,14 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    .stat-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .stat-card.danger .stat-value {
+      color: var(--error);
+    }
+
     .stat-value {
       font-size: 2rem;
       font-weight: 600;
@@ -1716,9 +1724,13 @@ document.addEventListener('click', () => {
                   <div class="stat-value">${stats.transactionCount}</div>
                   <div class="stat-label">Transactions</div>
                 </div>
-                <div class="stat-card success">
+                <div class="stat-card danger">
                   <div class="stat-value">₹${stats.totalSpent.toFixed(2)}</div>
                   <div class="stat-label">Total Spent</div>
+                </div>
+                <div class="stat-card success full-width">
+                  <div class="stat-value">₹${stats.totalReceived.toFixed(2)}</div>
+                  <div class="stat-label">Total Received</div>
                 </div>
               </div>
 

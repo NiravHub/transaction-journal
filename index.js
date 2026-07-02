@@ -274,16 +274,30 @@ app.get('/api/auth/profile', requireAuth, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const statsResult = await pool.query(
-      'SELECT COUNT(*) as count, COALESCE(SUM(amount), 0) as total FROM transactions WHERE user_id = $1',
+    // Get total transaction count
+    const countResult = await pool.query(
+      'SELECT COUNT(*) as count FROM transactions WHERE user_id = $1',
+      [req.session.userId]
+    );
+
+    // Get total spent (transactions with type 'spent')
+    const spentResult = await pool.query(
+      "SELECT COALESCE(SUM(amount), 0) as total FROM transactions WHERE user_id = $1 AND transaction_type = 'spent'",
+      [req.session.userId]
+    );
+
+    // Get total received (transactions with type 'received')
+    const receivedResult = await pool.query(
+      "SELECT COALESCE(SUM(amount), 0) as total FROM transactions WHERE user_id = $1 AND transaction_type = 'received'",
       [req.session.userId]
     );
 
     res.json({
       user: userResult.rows[0],
       stats: {
-        transactionCount: parseInt(statsResult.rows[0].count),
-        totalSpent: parseFloat(statsResult.rows[0].total)
+        transactionCount: parseInt(countResult.rows[0].count),
+        totalSpent: parseFloat(spentResult.rows[0].total),
+        totalReceived: parseFloat(receivedResult.rows[0].total)
       }
     });
   } catch (error) {
