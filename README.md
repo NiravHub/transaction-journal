@@ -1,1 +1,1 @@
-# transaction-journal
+# Transaction Journal
