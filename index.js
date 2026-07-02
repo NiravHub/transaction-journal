@@ -464,12 +464,8 @@ app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
-app.get('/profile', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'profile.html'));
-});
-
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'about.html'));
+app.get(['/dashboard', '/profile', '/about', '/transactions', '/add-transaction'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;

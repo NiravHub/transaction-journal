@@ -1052,16 +1052,32 @@
         <span class="branding-credit">By Nirav</span>
       </div>
       <nav class="sidebar-nav">
+        <a href="/dashboard" class="sidebar-nav-item" data-page="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9"></rect>
+            <rect x="14" y="3" width="7" height="5"></rect>
+            <rect x="14" y="12" width="7" height="9"></rect>
+            <rect x="3" y="16" width="7" height="5"></rect>
+          </svg>
+          Dashboard
+        </a>
+        <a href="/add-transaction" class="sidebar-nav-item" data-page="add-transaction">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add Transaction
+        </a>
+        <a href="/transactions" class="sidebar-nav-item" data-page="transactions">
+          <span class="nav-icon-text">₹</span>
+          Transactions
+        </a>
         <a href="/profile" class="sidebar-nav-item" data-page="profile">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
           Profile
-        </a>
-        <a href="/transactions" class="sidebar-nav-item" data-page="transactions">
-          <span class="nav-icon-text">₹</span>
-          Transactions
         </a>
         <a href="/about" class="sidebar-nav-item" data-page="about">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1089,6 +1105,12 @@
           <button class="btn btn-primary" id="addBtn" style="display: none;">+ Add Transaction</button>
         </div>
 
+        <section id="page-dashboard" class="page-section">
+          <div id="dashboardContent">
+            <div class="loading">Loading dashboard...</div>
+          </div>
+        </section>
+
         <section id="page-profile" class="page-section">
           <div id="profileContent">
             <div class="loading">Loading profile...</div>
@@ -1101,6 +1123,78 @@
           </div>
           <div class="transactions-list" id="transactionsList">
             <div class="loading">Loading transactions...</div>
+          </div>
+        </section>
+
+        <section id="page-add-transaction" class="page-section">
+          <div class="content-card">
+            <h2 id="pageFormTitle" style="margin-bottom: 24px;">Add Transaction</h2>
+            <form id="transactionForm">
+              <div class="form-group">
+                <label for="title">Title *</label>
+                <input type="text" id="title" required placeholder="Enter transaction title">
+              </div>
+
+              <div class="form-group">
+                <label for="amount">Amount *</label>
+                <input type="number" id="amount" required step="0.01" min="0" placeholder="0.00">
+              </div>
+
+              <div class="form-group">
+                <label for="datetime">Date & Time *</label>
+                <input type="datetime-local" id="datetime" required>
+              </div>
+
+              <div class="form-group">
+                <label>Payment Method *</label>
+                <div class="custom-select-wrapper">
+                  <div class="custom-select-trigger" id="paymentTrigger">
+                    <span id="paymentSelected">Select payment method</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                  <div class="custom-select-options" id="paymentOptions">
+                    <div class="custom-option" data-value="GPay">GPay</div>
+                    <div class="custom-option" data-value="POP UPI">POP UPI</div>
+                    <div class="custom-option" data-value="Paytm">Paytm</div>
+                    <div class="custom-option" data-value="BHIM">BHIM</div>
+                    <div class="custom-option" data-value="Other">Other</div>
+                  </div>
+                  <input type="hidden" id="payment_method" required>
+                </div>
+              </div>
+
+              <div class="form-group" id="other_payment_group" style="display: none;">
+                <label for="other_payment_method">Payment Method Name *</label>
+                <input type="text" id="other_payment_method" placeholder="Enter payment method name">
+              </div>
+
+              <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="Enter location (optional)">
+              </div>
+
+              <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea id="notes" placeholder="Add notes (optional)"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Image/Screenshot</label>
+                <div class="file-input-wrapper">
+                  <input type="file" id="image" accept="image/*">
+                  <label for="image" class="file-label">Click to upload image (optional)</label>
+                </div>
+                <div class="file-name" id="fileName"></div>
+                <img class="image-preview" id="imagePreview" alt="Preview">
+              </div>
+
+              <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelForm">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Transaction</button>
+              </div>
+            </form>
           </div>
         </section>
 
@@ -1156,77 +1250,77 @@
     </main>
   </div>
 
-  <!-- Add/Edit Transaction Modal -->
-  <div class="modal-overlay" id="formModal">
+  <!-- Add/Edit Transaction Modal (Temporary/Legacy) -->
+  <div class="modal-overlay" id="formModalOld">
     <div class="modal">
       <div class="modal-header">
-        <h2 id="modalTitle">Add Transaction</h2>
-        <button class="close-btn" id="closeFormModal">&times;</button>
+        <h2 id="modalTitleOld">Add Transaction</h2>
+        <button class="close-btn" id="closeFormModalOld">&times;</button>
       </div>
       <div class="modal-body">
-        <form id="transactionForm">
+        <form id="transactionFormOld">
           <div class="form-group">
-            <label for="title">Title *</label>
-            <input type="text" id="title" required placeholder="Enter transaction title">
+            <label for="titleOld">Title *</label>
+            <input type="text" id="titleOld" placeholder="Enter transaction title">
           </div>
 
           <div class="form-group">
-            <label for="amount">Amount *</label>
-            <input type="number" id="amount" required step="0.01" min="0" placeholder="0.00">
+            <label for="amountOld">Amount *</label>
+            <input type="number" id="amountOld" step="0.01" min="0" placeholder="0.00">
           </div>
 
           <div class="form-group">
-            <label for="datetime">Date & Time *</label>
-            <input type="datetime-local" id="datetime" required>
+            <label for="datetimeOld">Date & Time *</label>
+            <input type="datetime-local" id="datetimeOld">
           </div>
 
           <div class="form-group">
             <label>Payment Method *</label>
             <div class="custom-select-wrapper">
-              <div class="custom-select-trigger" id="paymentTrigger">
-                <span id="paymentSelected">Select payment method</span>
+              <div class="custom-select-trigger" id="paymentTriggerOld">
+                <span id="paymentSelectedOld">Select payment method</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </div>
-              <div class="custom-select-options" id="paymentOptions">
-                <div class="custom-option" data-value="GPay">GPay</div>
-                <div class="custom-option" data-value="POP UPI">POP UPI</div>
-                <div class="custom-option" data-value="Paytm">Paytm</div>
-                <div class="custom-option" data-value="BHIM">BHIM</div>
-                <div class="custom-option" data-value="Other">Other</div>
+              <div class="custom-select-options" id="paymentOptionsOld">
+                <div class="custom-option-old" data-value="GPay">GPay</div>
+                <div class="custom-option-old" data-value="POP UPI">POP UPI</div>
+                <div class="custom-option-old" data-value="Paytm">Paytm</div>
+                <div class="custom-option-old" data-value="BHIM">BHIM</div>
+                <div class="custom-option-old" data-value="Other">Other</div>
               </div>
-              <input type="hidden" id="payment_method" required>
+              <input type="hidden" id="payment_methodOld">
             </div>
           </div>
 
-          <div class="form-group" id="other_payment_group" style="display: none;">
-            <label for="other_payment_method">Payment Method Name *</label>
-            <input type="text" id="other_payment_method" placeholder="Enter payment method name">
+          <div class="form-group" id="other_payment_groupOld" style="display: none;">
+            <label for="other_payment_methodOld">Payment Method Name *</label>
+            <input type="text" id="other_payment_methodOld" placeholder="Enter payment method name">
           </div>
 
           <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" placeholder="Enter location (optional)">
+            <label for="locationOld">Location</label>
+            <input type="text" id="locationOld" placeholder="Enter location (optional)">
           </div>
 
           <div class="form-group">
-            <label for="notes">Notes</label>
-            <textarea id="notes" placeholder="Add notes (optional)"></textarea>
+            <label for="notesOld">Notes</label>
+            <textarea id="notesOld" placeholder="Add notes (optional)"></textarea>
           </div>
 
           <div class="form-group">
             <label>Image/Screenshot</label>
             <div class="file-input-wrapper">
-              <input type="file" id="image" accept="image/*">
-              <label for="image" class="file-label">Click to upload image (optional)</label>
+              <input type="file" id="imageOld" accept="image/*">
+              <label for="imageOld" class="file-label">Click to upload image (optional)</label>
             </div>
-            <div class="file-name" id="fileName"></div>
-            <img class="image-preview" id="imagePreview" alt="Preview">
+            <div class="file-name" id="fileNameOld"></div>
+            <img class="image-preview" id="imagePreviewOld" alt="Preview">
           </div>
 
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" id="cancelForm">Cancel</button>
+            <button type="button" class="btn btn-secondary" id="cancelFormOld">Cancel</button>
             <button type="submit" class="btn btn-primary">Save Transaction</button>
           </div>
         </form>
@@ -1255,10 +1349,10 @@
     const transactionsList = document.getElementById('transactionsList');
     const searchInput = document.getElementById('searchInput');
     const addBtn = document.getElementById('addBtn');
-    const formModal = document.getElementById('formModal');
+    const formModal = document.getElementById('formModalOld');
     const detailModal = document.getElementById('detailModal');
     const transactionForm = document.getElementById('transactionForm');
-    const closeFormModal = document.getElementById('closeFormModal');
+    const closeFormModal = document.getElementById('closeFormModalOld');
     const closeDetailModal = document.getElementById('closeDetailModal');
     const cancelForm = document.getElementById('cancelForm');
     const imageInput = document.getElementById('image');
@@ -1269,7 +1363,7 @@
     const paymentMethodSelect = document.getElementById('payment_method');
     const otherPaymentGroup = document.getElementById('other_payment_group');
     const otherPaymentMethod = document.getElementById('other_payment_method');
-    const modalTitle = document.getElementById('modalTitle');
+    const modalTitle = document.getElementById('pageFormTitle');
     const submitBtn = document.querySelector('#transactionForm button[type="submit"]');
     // Custom payment method dropdown
 const paymentTrigger = document.getElementById('paymentTrigger');
@@ -1323,15 +1417,19 @@ document.addEventListener('click', () => {
     let isSaving = false;
 
     const PAGE_TITLES = {
-      profile: 'Profile - Transaction Journal',
+      dashboard: 'Dashboard - Transaction Journal',
+      'add-transaction': 'Add Transaction - Transaction Journal',
       transactions: 'Transactions - Transaction Journal',
+      profile: 'Profile - Transaction Journal',
       about: 'About - Transaction Journal'
     };
 
     const ROUTE_MAP = {
-      '/': 'profile',
-      '/profile': 'profile',
+      '/': 'dashboard',
+      '/dashboard': 'dashboard',
+      '/add-transaction': 'add-transaction',
       '/transactions': 'transactions',
+      '/profile': 'profile',
       '/about': 'about'
     };
 
@@ -1347,18 +1445,32 @@ document.addEventListener('click', () => {
     });
 
     function getPageFromPath() {
-      return ROUTE_MAP[window.location.pathname] || 'profile';
+      return ROUTE_MAP[window.location.pathname] || 'dashboard';
     }
 
     function setupNavigation() {
       document.querySelectorAll('.sidebar-nav-item[data-page]').forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
+          if (currentPage === 'add-transaction' && formHasChanges) {
+            if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+              return;
+            }
+          }
+          if (link.dataset.page === 'add-transaction') {
+            resetAddForm();
+          }
           navigateTo(link.dataset.page);
         });
       });
 
       window.addEventListener('popstate', () => {
+        if (currentPage === 'add-transaction' && formHasChanges) {
+          if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+            history.pushState({ page: 'add-transaction' }, '', '/add-transaction');
+            return;
+          }
+        }
         showPage(getPageFromPath());
       });
     }
@@ -1382,7 +1494,7 @@ document.addEventListener('click', () => {
     }
 
     function navigateTo(page) {
-      const path = page === 'profile' ? '/profile' : '/' + page;
+      const path = page === 'dashboard' ? '/' : '/' + page;
       history.pushState({ page }, '', path);
       showPage(page);
     }
@@ -1399,12 +1511,14 @@ document.addEventListener('click', () => {
         link.classList.toggle('active', link.dataset.page === page);
       });
 
-      addBtn.style.display = (page === 'profile' || page === 'transactions') ? '' : 'none';
+      addBtn.style.display = (page === 'transactions') ? '' : 'none';
       document.title = PAGE_TITLES[page] || 'Transaction Journal';
 
       closeMobileMenu();
 
-      if (page === 'profile') {
+      if (page === 'dashboard') {
+        loadProfile();
+      } else if (page === 'profile') {
         loadProfile();
       } else if (page === 'transactions') {
         fetchTransactions(searchInput.value);
@@ -1412,7 +1526,8 @@ document.addEventListener('click', () => {
     }
 
     async function loadProfile() {
-      const content = document.getElementById('profileContent');
+      const dashboardContent = document.getElementById('dashboardContent');
+      const profileContent = document.getElementById('profileContent');
 
       try {
         const response = await fetch('/api/auth/profile');
@@ -1429,45 +1544,83 @@ document.addEventListener('click', () => {
         const { user, stats } = data;
         const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
-        content.innerHTML = `
-          <div class="profile-card">
-            <div class="profile-header">
-              <div class="avatar">${initials}</div>
-              <div class="profile-info">
-                <h2>${escapeHtml(user.name)}</h2>
-                <div class="username">@${escapeHtml(user.username)}${user.username === 'demo' ? '<span class="demo-badge">Demo Account</span>' : ''}</div>
+        if (currentPage === 'dashboard' && dashboardContent) {
+          dashboardContent.innerHTML = `
+            <div class="profile-card">
+              <div class="profile-header">
+                <div class="avatar">${initials}</div>
+                <div class="profile-info">
+                  <h2>Welcome, ${escapeHtml(user.name)}!</h2>
+                  <div class="username">@${escapeHtml(user.username)}${user.username === 'demo' ? '<span class="demo-badge">Demo Account</span>' : ''}</div>
+                </div>
+              </div>
+
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-value">${stats.transactionCount}</div>
+                  <div class="stat-label">Transactions</div>
+                </div>
+                <div class="stat-card success">
+                  <div class="stat-value">₹${stats.totalSpent.toFixed(2)}</div>
+                  <div class="stat-label">Total Spent</div>
+                </div>
+              </div>
+
+              <h3 style="margin-top: 24px; margin-bottom: 14px; font-size: 1.1rem; color: var(--text-secondary);">Quick Actions</h3>
+              <div class="dashboard-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="dashAddBtn">+ Add Transaction</button>
+                <button class="btn btn-secondary" id="dashViewBtn">View Transactions</button>
+                <button class="btn btn-secondary" id="dashProfileBtn">View Profile</button>
               </div>
             </div>
+          `;
 
-            <div class="profile-field">
-              <span class="field-label">Name</span>
-              <span class="field-value">${escapeHtml(user.name)}</span>
-            </div>
+          // Add event listeners for quick actions
+          document.getElementById('dashAddBtn').addEventListener('click', () => {
+            resetAddForm();
+            navigateTo('add-transaction');
+          });
+          document.getElementById('dashViewBtn').addEventListener('click', () => {
+            navigateTo('transactions');
+          });
+          document.getElementById('dashProfileBtn').addEventListener('click', () => {
+            navigateTo('profile');
+          });
 
-            <div class="profile-field">
-              <span class="field-label">Username</span>
-              <span class="field-value">${escapeHtml(user.username)}</span>
-            </div>
-
-            <div class="profile-field">
-              <span class="field-label">Member Since</span>
-              <span class="field-value">${formatProfileDate(user.created_at)}</span>
-            </div>
-
-            <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-value">${stats.transactionCount}</div>
-                <div class="stat-label">Transactions</div>
+        } else if (currentPage === 'profile' && profileContent) {
+          profileContent.innerHTML = `
+            <div class="profile-card">
+              <div class="profile-header">
+                <div class="avatar">${initials}</div>
+                <div class="profile-info">
+                  <h2>${escapeHtml(user.name)}</h2>
+                  <div class="username">@${escapeHtml(user.username)}${user.username === 'demo' ? '<span class="demo-badge">Demo Account</span>' : ''}</div>
+                </div>
               </div>
-              <div class="stat-card success">
-                <div class="stat-value">₹${stats.totalSpent.toFixed(2)}</div>
-                <div class="stat-label">Total Spent</div>
+
+              <div class="profile-field">
+                <span class="field-label">Name</span>
+                <span class="field-value">${escapeHtml(user.name)}</span>
+              </div>
+
+              <div class="profile-field">
+                <span class="field-label">Username</span>
+                <span class="field-value">${escapeHtml(user.username)}</span>
+              </div>
+
+              <div class="profile-field">
+                <span class="field-label">Member Since</span>
+                <span class="field-value">${formatProfileDate(user.created_at)}</span>
               </div>
             </div>
-          </div>
-        `;
+          `;
+        }
       } catch (err) {
-        content.innerHTML = '<div class="loading">Error loading profile.</div>';
+        if (currentPage === 'dashboard' && dashboardContent) {
+          dashboardContent.innerHTML = '<div class="loading">Error loading dashboard.</div>';
+        } else if (currentPage === 'profile' && profileContent) {
+          profileContent.innerHTML = '<div class="loading">Error loading profile.</div>';
+        }
       }
     }
 
@@ -1635,8 +1788,7 @@ document.addEventListener('click', () => {
       }, 300);
     });
 
-    // Open add modal
-    addBtn.addEventListener('click', () => {
+    function resetAddForm() {
       editingTransactionId = null;
       setDefaultDateTime();
       transactionForm.reset();
@@ -1646,9 +1798,23 @@ document.addEventListener('click', () => {
       otherPaymentGroup.style.display = 'none';
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Save Transaction';
-      document.getElementById('modalTitle').textContent = 'Add Transaction';
+      if (document.getElementById('pageFormTitle')) {
+        document.getElementById('pageFormTitle').textContent = 'Add Transaction';
+      }
       formHasChanges = false;
-      openModal(formModal);
+
+      const paymentSelected = document.getElementById('paymentSelected');
+      if (paymentSelected) {
+        paymentSelected.textContent = 'Select payment method';
+        paymentSelected.style.color = '';
+      }
+      document.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+    }
+
+    // Open add page
+    addBtn.addEventListener('click', () => {
+      resetAddForm();
+      navigateTo('add-transaction');
     });
 
     // Payment method change handler
@@ -1687,7 +1853,17 @@ document.addEventListener('click', () => {
 
     closeFormModal.addEventListener('click', () => closeModal(formModal));
     closeDetailModal.addEventListener('click', () => closeModal(detailModal));
-    cancelForm.addEventListener('click', () => closeModal(formModal));
+    
+    cancelForm.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (formHasChanges) {
+        if (!confirm('You have unsaved changes. Are you sure you want to leave?')) {
+          return;
+        }
+      }
+      formHasChanges = false;
+      navigateTo('transactions');
+    });
 
     // Close on overlay click
     formModal.addEventListener('click', (e) => {
@@ -1756,10 +1932,8 @@ document.addEventListener('click', () => {
 
         if (response.ok) {
           formHasChanges = false;
-          closeModal(formModal);
-          fetchTransactions(searchInput.value);
-          if (currentPage === 'profile') loadProfile();
           showToast('Transaction saved successfully', 'success');
+          navigateTo('transactions');
         } else if (response.status === 401) {
           window.location.href = '/login';
         } else if (response.status === 409) {
@@ -1859,7 +2033,7 @@ document.addEventListener('click', () => {
       }
     }
 
-    // Open edit modal with pre-filled data
+    // Open edit page with pre-filled data
     function openEditModal(transaction) {
       editingTransactionId = transaction.id;
 
@@ -1869,9 +2043,12 @@ document.addEventListener('click', () => {
       document.getElementById('location').value = transaction.location || '';
       document.getElementById('notes').value = transaction.notes || '';
 
-      // Handle payment method selection
-      const standardMethods = ['GPay', 'PhonePe', 'Paytm', 'BHIM'];
-      if (standardMethods.includes(transaction.payment_method)) {
+      // Update custom select trigger text and input value
+      const paymentSelected = document.getElementById('paymentSelected');
+      const standardOptions = ['GPay', 'POP UPI', 'Paytm', 'BHIM'];
+      
+      let finalVal = transaction.payment_method;
+      if (standardOptions.includes(transaction.payment_method)) {
         paymentMethodSelect.value = transaction.payment_method;
         otherPaymentGroup.style.display = 'none';
         otherPaymentMethod.required = false;
@@ -1881,7 +2058,18 @@ document.addEventListener('click', () => {
         otherPaymentGroup.style.display = 'block';
         otherPaymentMethod.required = true;
         otherPaymentMethod.value = transaction.payment_method;
+        finalVal = 'Other';
       }
+
+      if (paymentSelected) {
+        paymentSelected.textContent = finalVal;
+        paymentSelected.style.color = 'var(--text-primary)';
+      }
+      
+      // Update selected class in custom dropdown options
+      document.querySelectorAll('.custom-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.value === finalVal);
+      });
 
       // Show existing image if any
       if (transaction.image_url) {
@@ -1893,11 +2081,14 @@ document.addEventListener('click', () => {
         fileName.textContent = '';
       }
 
-      document.getElementById('modalTitle').textContent = 'Edit Transaction';
+      if (document.getElementById('pageFormTitle')) {
+        document.getElementById('pageFormTitle').textContent = 'Edit Transaction';
+      }
       submitBtn.innerHTML = 'Save Transaction';
       submitBtn.disabled = false;
       formHasChanges = false;
-      openModal(formModal);
+      
+      navigateTo('add-transaction');
     }
 
     // Delete transaction
