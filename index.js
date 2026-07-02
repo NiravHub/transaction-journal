@@ -71,6 +71,7 @@ async function initDB() {
         image_url TEXT,
         image_public_id TEXT,
         user_id INTEGER REFERENCES users(id),
+        transaction_type TEXT DEFAULT 'spent',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -78,6 +79,13 @@ async function initDB() {
     // Add user_id column if it doesn't exist (for existing tables)
     try {
       await pool.query(`ALTER TABLE transactions ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id)`);
+    } catch (err) {
+      // Column might already exist
+    }
+
+    // Add transaction_type column if it doesn't exist
+    try {
+      await pool.query(`ALTER TABLE transactions ADD COLUMN IF NOT EXISTS transaction_type TEXT DEFAULT 'spent'`);
     } catch (err) {
       // Column might already exist
     }
@@ -326,14 +334,22 @@ app.get('/api/transactions/:id', requireAuth, async (req, res) => {
 // Create new transaction
 app.post('/api/transactions', requireAuth, upload.single('image'), async (req, res) => {
   try {
-    const { title, amount, datetime, notes, payment_method, location, other_payment_method } = req.body;
+    const { title, amount, datetime, notes, payment_method, location, other_payment_method, transaction_type } = req.body;
 
-    if (!title || !amount || !datetime || !payment_method) {
+    if (!title || !amount || !datetime) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Determine final payment method
-    let final_payment_method = payment_method;
+    // Validate and set transaction_type
+    const final_transaction_type = (transaction_type === 'received') ? 'received' : 'spent';
+
+    // For 'spent' transactions, payment_method is required
+    if (final_transaction_type === 'spent' && !payment_method) {
+      return res.status(400).json({ error: 'Payment method is required for spent transactions' });
+    }
+
+    // Determine final payment method (only for spent transactions)
+    let final_payment_method = payment_method || '';
     if (payment_method === 'Other') {
       if (!other_payment_method || !other_payment_method.trim()) {
         return res.status(400).json({ error: 'Payment method name is required when Other is selected' });
@@ -362,10 +378,10 @@ app.post('/api/transactions', requireAuth, upload.single('image'), async (req, r
     }
 
     const result = await pool.query(
-      `INSERT INTO transactions (title, amount, datetime, notes, payment_method, location, image_url, image_public_id, user_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO transactions (title, amount, datetime, notes, payment_method, location, image_url, image_public_id, user_id, transaction_type)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
-      [title, parseFloat(amount), datetime, notes || '', final_payment_method, location || '', image_url, image_public_id, req.session.userId]
+      [title, parseFloat(amount), datetime, notes || '', final_payment_method, location || '', image_url, image_public_id, req.session.userId, final_transaction_type]
     );
 
     res.status(201).json(result.rows[0]);
@@ -400,7 +416,7 @@ app.delete('/api/transactions/:id', requireAuth, async (req, res) => {
 // Update transaction
 app.put('/api/transactions/:id', requireAuth, upload.single('image'), async (req, res) => {
   try {
-    const { title, amount, datetime, notes, payment_method, location, other_payment_method } = req.body;
+    const { title, amount, datetime, notes, payment_method, location, other_payment_method, transaction_type } = req.body;
 
     // Check if transaction exists and belongs to user
     const existingResult = await pool.query('SELECT * FROM transactions WHERE id = $1 AND user_id = $2', [req.params.id, req.session.userId]);
@@ -410,12 +426,20 @@ app.put('/api/transactions/:id', requireAuth, upload.single('image'), async (req
 
     const existing = existingResult.rows[0];
 
-    if (!title || !amount || !datetime || !payment_method) {
+    if (!title || !amount || !datetime) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Determine final payment method
-    let final_payment_method = payment_method;
+    // Validate and set transaction_type
+    const final_transaction_type = (transaction_type === 'received') ? 'received' : 'spent';
+
+    // For 'spent' transactions, payment_method is required
+    if (final_transaction_type === 'spent' && !payment_method) {
+      return res.status(400).json({ error: 'Payment method is required for spent transactions' });
+    }
+
+    // Determine final payment method (only for spent transactions)
+    let final_payment_method = payment_method || '';
     if (payment_method === 'Other') {
       if (!other_payment_method || !other_payment_method.trim()) {
         return res.status(400).json({ error: 'Payment method name is required when Other is selected' });
@@ -438,10 +462,10 @@ app.put('/api/transactions/:id', requireAuth, upload.single('image'), async (req
 
     const result = await pool.query(
       `UPDATE transactions
-       SET title = $1, amount = $2, datetime = $3, notes = $4, payment_method = $5, location = $6, image_url = $7, image_public_id = $8
-       WHERE id = $9 AND user_id = $10
+       SET title = $1, amount = $2, datetime = $3, notes = $4, payment_method = $5, location = $6, image_url = $7, image_public_id = $8, transaction_type = $9
+       WHERE id = $10 AND user_id = $11
        RETURNING *`,
-      [title, parseFloat(amount), datetime, notes || '', final_payment_method, location || '', image_url, image_public_id, req.params.id, req.session.userId]
+      [title, parseFloat(amount), datetime, notes || '', final_payment_method, location || '', image_url, image_public_id, final_transaction_type, req.params.id, req.session.userId]
     );
 
     res.json(result.rows[0]);
