@@ -1,24 +1,19 @@
-require('dotenv').config();
+require("dotenv").config();
 
-//import new modules
+// Core packages
+const express = require("express");
+const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const bcrypt = require("bcrypt");
+const path = require("path");
+
+// App modules
 const pool = require("./config/db");
-const cloudinary = require("./config/cloudinary");
-const { upload, uploadToCloudinary } = require("./config/upload");
-const { requireAuth } = require("./middleware/auth");
 const authRoutes = require("./routes/auth");
 const transactionRoutes = require("./routes/transactions");
 
-//old import statements
-const express = require('express');
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-const bcrypt = require('bcrypt');
-const path = require("path");
 const app = express();
 app.set('trust proxy', 1);
-
-//temp
-console.log(process.env.DATABASE_URL);
 
 // Create tables on startup
 async function initDB() {
@@ -104,10 +99,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
-
-// Auth Routes
-
-// Transaction Routes (protected)
 
 // Serve pages
 app.get('/', (req, res) => {
