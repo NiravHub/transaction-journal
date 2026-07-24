@@ -9,6 +9,7 @@ const {
   getTransactionById,
   createTransaction,
   updateTransaction,
+  deleteTransaction,
 } = require("../controllers/transactionController");
 const cloudinary = require("../config/cloudinary");
 
@@ -46,25 +47,6 @@ router.put(
 );
 
 // Delete transaction
-router.delete('/:id', requireAuth, async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM transactions WHERE id = $1 AND user_id = $2', [req.params.id, req.session.userId]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Transaction not found' });
-    }
-
-    const transaction = result.rows[0];
-
-    if (transaction.image_public_id) {
-      await deleteFromCloudinary(transaction.image_public_id);
-    }
-
-    await pool.query('DELETE FROM transactions WHERE id = $1', [req.params.id]);
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting transaction:', error);
-    res.status(500).json({ error: 'Failed to delete transaction' });
-  }
-});
+router.delete("/:id", requireAuth, deleteTransaction);
 
 module.exports = router;
