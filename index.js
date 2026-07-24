@@ -1,8 +1,9 @@
 require('dotenv').config();
 
-//import modules
-//import the pool from db.js
+//import new modules
 const pool = require("./config/db");
+const cloudinary = require("./config/cloudinary");
+
 
 //old import statements
 const express = require('express');
@@ -10,7 +11,7 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 
 const bcrypt = require('bcrypt');
-const cloudinary = require('cloudinary').v2;
+
 const multer = require('multer');
 const path = require('path');
 const stream = require('stream');
@@ -18,12 +19,7 @@ const stream = require('stream');
 const app = express();
 app.set('trust proxy', 1);
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+
 
 // Configure multer for in-memory storage (for Cloudinary upload)
 const storage = multer.memoryStorage();
