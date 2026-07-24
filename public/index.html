@@ -451,6 +451,14 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    .stat-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .stat-card.danger .stat-value {
+      color: var(--error);
+    }
+
     .stat-value {
       font-size: 2rem;
       font-weight: 600;
@@ -658,6 +666,110 @@
     .payment-badge.paytm { background-color: var(--paytm-color); color: white; }
     .payment-badge.bhim { background-color: var(--bhim-color); color: white; }
     .payment-badge.other { background-color: var(--other-color); color: white; }
+
+    /* Transaction Type Toggle */
+    .transaction-type-section {
+      margin-bottom: 16px;
+    }
+
+    .transaction-type-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .transaction-type-toggle {
+      display: flex;
+      gap: 12px;
+    }
+
+    .type-toggle-btn {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 2px solid transparent;
+      background: transparent;
+    }
+
+    .type-toggle-btn.spent {
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .type-toggle-btn.spent.active {
+      background: var(--error);
+      color: white;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .type-toggle-btn.received {
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .type-toggle-btn.received.active {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+    }
+
+    .type-toggle-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .type-toggle-btn.active:hover {
+      transform: none;
+    }
+
+    /* Conditional field animations */
+    .conditional-field {
+      overflow: hidden;
+      max-height: 200px;
+      opacity: 1;
+      transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+    }
+
+    .conditional-field.hidden {
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0 !important;
+      margin-top: 0 !important;
+      pointer-events: none;
+    }
+
+    /* Transaction type badge */
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .type-badge.spent {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .type-badge.received {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
 
     .payment-badge.fallback {
       background-color: var(--bg-tertiary);
@@ -1135,6 +1247,19 @@
                 <input type="text" id="title" required placeholder="Enter transaction title">
               </div>
 
+              <div class="transaction-type-section">
+                <label class="transaction-type-label">Transaction Type</label>
+                <div class="transaction-type-toggle">
+                  <button type="button" class="type-toggle-btn spent active" id="spentBtn" data-type="spent">
+                    <span>💸</span> Spent
+                  </button>
+                  <button type="button" class="type-toggle-btn received" id="receivedBtn" data-type="received">
+                    <span>💰</span> Received
+                  </button>
+                </div>
+                <input type="hidden" id="transaction_type" value="spent">
+              </div>
+
               <div class="form-group">
                 <label for="amount">Amount *</label>
                 <input type="number" id="amount" required step="0.01" min="0" placeholder="0.00">
@@ -1145,34 +1270,37 @@
                 <input type="datetime-local" id="datetime" required>
               </div>
 
-              <div class="form-group">
-                <label>Payment Method *</label>
-                <div class="custom-select-wrapper">
-                  <div class="custom-select-trigger" id="paymentTrigger">
-                    <span id="paymentSelected">Select payment method</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
+              <!-- Conditional fields for 'spent' transactions only -->
+              <div id="spentOnlyFields">
+                <div class="form-group">
+                  <label>Payment Method *</label>
+                  <div class="custom-select-wrapper">
+                    <div class="custom-select-trigger" id="paymentTrigger">
+                      <span id="paymentSelected">Select payment method</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                    <div class="custom-select-options" id="paymentOptions">
+                      <div class="custom-option" data-value="GPay">GPay</div>
+                      <div class="custom-option" data-value="POP UPI">POP UPI</div>
+                      <div class="custom-option" data-value="Paytm">Paytm</div>
+                      <div class="custom-option" data-value="BHIM">BHIM</div>
+                      <div class="custom-option" data-value="Other">Other</div>
+                    </div>
+                    <input type="hidden" id="payment_method">
                   </div>
-                  <div class="custom-select-options" id="paymentOptions">
-                    <div class="custom-option" data-value="GPay">GPay</div>
-                    <div class="custom-option" data-value="POP UPI">POP UPI</div>
-                    <div class="custom-option" data-value="Paytm">Paytm</div>
-                    <div class="custom-option" data-value="BHIM">BHIM</div>
-                    <div class="custom-option" data-value="Other">Other</div>
-                  </div>
-                  <input type="hidden" id="payment_method" required>
                 </div>
-              </div>
 
-              <div class="form-group" id="other_payment_group" style="display: none;">
-                <label for="other_payment_method">Payment Method Name *</label>
-                <input type="text" id="other_payment_method" placeholder="Enter payment method name">
-              </div>
+                <div class="form-group" id="other_payment_group" style="display: none;">
+                  <label for="other_payment_method">Payment Method Name *</label>
+                  <input type="text" id="other_payment_method" placeholder="Enter payment method name">
+                </div>
 
-              <div class="form-group">
-                <label for="location">Location</label>
-                <input type="text" id="location" placeholder="Enter location (optional)">
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" id="location" placeholder="Enter location (optional)">
+                </div>
               </div>
 
               <div class="form-group">
@@ -1365,6 +1493,42 @@
     const otherPaymentMethod = document.getElementById('other_payment_method');
     const modalTitle = document.getElementById('pageFormTitle');
     const submitBtn = document.querySelector('#transactionForm button[type="submit"]');
+    const transactionTypeInput = document.getElementById('transaction_type');
+    const spentBtn = document.getElementById('spentBtn');
+    const receivedBtn = document.getElementById('receivedBtn');
+    const spentOnlyFields = document.getElementById('spentOnlyFields');
+
+    // Transaction Type Toggle
+    function setTransactionType(type) {
+      transactionTypeInput.value = type;
+
+      if (type === 'spent') {
+        spentBtn.classList.add('active');
+        receivedBtn.classList.remove('active');
+        spentOnlyFields.style.display = 'block';
+        // Set payment_method as required
+        document.getElementById('payment_method').required = true;
+      } else {
+        spentBtn.classList.remove('active');
+        receivedBtn.classList.add('active');
+        spentOnlyFields.style.display = 'none';
+        // Remove required from payment_method for received transactions
+        document.getElementById('payment_method').required = false;
+        document.getElementById('payment_method').value = '';
+        document.getElementById('paymentSelected').textContent = 'Select payment method';
+        document.getElementById('paymentSelected').style.color = '';
+        document.getElementById('other_payment_method').value = '';
+        document.getElementById('other_payment_group').style.display = 'none';
+        document.getElementById('location').value = '';
+      }
+      formHasChanges = true;
+    }
+
+    if (spentBtn && receivedBtn) {
+      spentBtn.addEventListener('click', () => setTransactionType('spent'));
+      receivedBtn.addEventListener('click', () => setTransactionType('received'));
+    }
+
     // Custom payment method dropdown
 const paymentTrigger = document.getElementById('paymentTrigger');
 const paymentOptions = document.getElementById('paymentOptions');
@@ -1560,9 +1724,13 @@ document.addEventListener('click', () => {
                   <div class="stat-value">${stats.transactionCount}</div>
                   <div class="stat-label">Transactions</div>
                 </div>
-                <div class="stat-card success">
+                <div class="stat-card danger">
                   <div class="stat-value">₹${stats.totalSpent.toFixed(2)}</div>
                   <div class="stat-label">Total Spent</div>
+                </div>
+                <div class="stat-card success full-width">
+                  <div class="stat-value">₹${stats.totalReceived.toFixed(2)}</div>
+                  <div class="stat-label">Total Received</div>
                 </div>
               </div>
 
@@ -1717,20 +1885,25 @@ document.addEventListener('click', () => {
   transactionsList.innerHTML = Object.entries(groups).map(([month, txns]) => `
     <div class="month-group">
       <div class="month-heading">${month}</div>
-      ${txns.map(t => `
+      ${txns.map(t => {
+        const txType = t.transaction_type || 'spent';
+        const typeEmoji = txType === 'received' ? '💰' : '💸';
+        const typeLabel = txType === 'received' ? 'Received' : 'Spent';
+        return `
         <div class="transaction-card" data-id="${t.id}">
           <div class="transaction-header">
-            <div class="transaction-title">${escapeHtml(t.title)}</div>
+            <div class="transaction-title">${escapeHtml(t.title)}<span class="type-badge ${txType}">${typeEmoji} ${typeLabel}</span></div>
             <div class="transaction-amount">${formatAmount(t.amount)}</div>
           </div>
           <div class="transaction-meta">
             <span>${formatDate(t.datetime)}</span>
-            <span class="payment-badge ${getPaymentBadgeClass(t.payment_method)}">${t.payment_method}</span>
-            ${t.location ? `<span>${escapeHtml(t.location)}</span>` : ''}
+            ${txType === 'spent' ? `<span class="payment-badge ${getPaymentBadgeClass(t.payment_method)}">${t.payment_method}</span>` : ''}
+            ${t.location && txType === 'spent' ? `<span>${escapeHtml(t.location)}</span>` : ''}
             ${t.image_url ? '<span class="has-image">Has Image</span>' : ''}
           </div>
         </div>
-      `).join('')}
+      `;
+    }).join('')}
     </div>
   `).join('');
 
@@ -1802,6 +1975,9 @@ document.addEventListener('click', () => {
         document.getElementById('pageFormTitle').textContent = 'Add Transaction';
       }
       formHasChanges = false;
+
+      // Reset transaction type to 'spent'
+      setTransactionType('spent');
 
       const paymentSelected = document.getElementById('paymentSelected');
       if (paymentSelected) {
@@ -1903,12 +2079,17 @@ document.addEventListener('click', () => {
       formData.append('title', document.getElementById('title').value);
       formData.append('amount', document.getElementById('amount').value);
       formData.append('datetime', document.getElementById('datetime').value);
-      formData.append('payment_method', document.getElementById('payment_method').value);
-      formData.append('location', document.getElementById('location').value);
+      formData.append('transaction_type', transactionTypeInput.value);
       formData.append('notes', document.getElementById('notes').value);
 
-      if (paymentMethodSelect.value === 'Other') {
-        formData.append('other_payment_method', otherPaymentMethod.value);
+      // Only include payment method and location for 'spent' transactions
+      if (transactionTypeInput.value === 'spent') {
+        formData.append('payment_method', document.getElementById('payment_method').value);
+        formData.append('location', document.getElementById('location').value);
+
+        if (paymentMethodSelect.value === 'Other') {
+          formData.append('other_payment_method', otherPaymentMethod.value);
+        }
       }
 
       const imageFile = imageInput.files[0];
@@ -1973,10 +2154,13 @@ document.addEventListener('click', () => {
         }
 
         const detailBody = document.getElementById('detailBody');
+        const txType = transaction.transaction_type || 'spent';
+        const typeEmoji = txType === 'received' ? '💰' : '💸';
+        const typeLabel = txType === 'received' ? 'Received' : 'Spent';
         detailBody.innerHTML = `
           <div class="detail-row">
             <div class="detail-label">Title</div>
-            <div class="detail-value">${escapeHtml(transaction.title)}</div>
+            <div class="detail-value">${escapeHtml(transaction.title)} <span class="type-badge ${txType}">${typeEmoji} ${typeLabel}</span></div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Amount</div>
@@ -1986,6 +2170,7 @@ document.addEventListener('click', () => {
             <div class="detail-label">Date & Time</div>
             <div class="detail-value">${formatDate(transaction.datetime)}</div>
           </div>
+          ${txType === 'spent' ? `
           <div class="detail-row">
             <div class="detail-label">Payment</div>
             <div class="detail-value"><span class="payment-badge ${getPaymentBadgeClass(transaction.payment_method)}">${transaction.payment_method}</span></div>
@@ -1995,6 +2180,7 @@ document.addEventListener('click', () => {
             <div class="detail-label">Location</div>
             <div class="detail-value">${escapeHtml(transaction.location)}</div>
           </div>
+          ` : ''}
           ` : ''}
           ${transaction.notes ? `
           <div class="detail-row">
@@ -2043,33 +2229,39 @@ document.addEventListener('click', () => {
       document.getElementById('location').value = transaction.location || '';
       document.getElementById('notes').value = transaction.notes || '';
 
-      // Update custom select trigger text and input value
-      const paymentSelected = document.getElementById('paymentSelected');
-      const standardOptions = ['GPay', 'POP UPI', 'Paytm', 'BHIM'];
-      
-      let finalVal = transaction.payment_method;
-      if (standardOptions.includes(transaction.payment_method)) {
-        paymentMethodSelect.value = transaction.payment_method;
-        otherPaymentGroup.style.display = 'none';
-        otherPaymentMethod.required = false;
-        otherPaymentMethod.value = '';
-      } else {
-        paymentMethodSelect.value = 'Other';
-        otherPaymentGroup.style.display = 'block';
-        otherPaymentMethod.required = true;
-        otherPaymentMethod.value = transaction.payment_method;
-        finalVal = 'Other';
-      }
+      // Set transaction type
+      const txType = transaction.transaction_type || 'spent';
+      setTransactionType(txType);
 
-      if (paymentSelected) {
-        paymentSelected.textContent = finalVal;
-        paymentSelected.style.color = 'var(--text-primary)';
+      // Update custom select trigger text and input value (only for spent)
+      if (txType === 'spent') {
+        const paymentSelected = document.getElementById('paymentSelected');
+        const standardOptions = ['GPay', 'POP UPI', 'Paytm', 'BHIM'];
+
+        let finalVal = transaction.payment_method;
+        if (standardOptions.includes(transaction.payment_method)) {
+          paymentMethodSelect.value = transaction.payment_method;
+          otherPaymentGroup.style.display = 'none';
+          otherPaymentMethod.required = false;
+          otherPaymentMethod.value = '';
+        } else {
+          paymentMethodSelect.value = 'Other';
+          otherPaymentGroup.style.display = 'block';
+          otherPaymentMethod.required = true;
+          otherPaymentMethod.value = transaction.payment_method;
+          finalVal = 'Other';
+        }
+
+        if (paymentSelected) {
+          paymentSelected.textContent = finalVal;
+          paymentSelected.style.color = 'var(--text-primary)';
+        }
+
+        // Update selected class in custom dropdown options
+        document.querySelectorAll('.custom-option').forEach(opt => {
+          opt.classList.toggle('selected', opt.dataset.value === finalVal);
+        });
       }
-      
-      // Update selected class in custom dropdown options
-      document.querySelectorAll('.custom-option').forEach(opt => {
-        opt.classList.toggle('selected', opt.dataset.value === finalVal);
-      });
 
       // Show existing image if any
       if (transaction.image_url) {
@@ -2087,7 +2279,7 @@ document.addEventListener('click', () => {
       submitBtn.innerHTML = 'Save Transaction';
       submitBtn.disabled = false;
       formHasChanges = false;
-      
+
       navigateTo('add-transaction');
     }
 
