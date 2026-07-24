@@ -3,7 +3,7 @@ require('dotenv').config();
 //import new modules
 const pool = require("./config/db");
 const cloudinary = require("./config/cloudinary");
-
+const { requireAuth } = require("./middleware/auth");
 
 //old import statements
 const express = require('express');
@@ -155,13 +155,7 @@ async function deleteFromCloudinary(publicId) {
   }
 }
 
-// Auth middleware
-function requireAuth(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-  next();
-}
+
 
 // Middleware
 app.use(express.json());
