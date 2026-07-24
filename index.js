@@ -1,9 +1,14 @@
 require('dotenv').config();
 
+//import modules
+//import the pool from db.js
+const pool = require("./config/db");
+
+//old import statements
 const express = require('express');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
-const { Pool } = require('pg');
+
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
@@ -40,11 +45,7 @@ const upload = multer({
 //temp
 console.log(process.env.DATABASE_URL);
 
-// Initialize PostgreSQL connection
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
-});
+
 
 // Create tables on startup
 async function initDB() {
