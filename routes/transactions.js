@@ -4,7 +4,9 @@ const router = express.Router();
 const pool = require("../config/db");
 const { requireAuth } = require("../middleware/auth");
 const { upload, uploadToCloudinary } = require("../config/upload");
+const { getTransactions } = require("../controllers/transactionController");
 const cloudinary = require("../config/cloudinary");
+
 
 // Delete image from Cloudinary
 async function deleteFromCloudinary(publicId) {
@@ -17,27 +19,7 @@ async function deleteFromCloudinary(publicId) {
 } 
 
 // Get all transactions (newest first)
-router.get('/', requireAuth, async (req, res) => {
-  try {
-    const { search } = req.query;
-    let query = 'SELECT * FROM transactions WHERE user_id = $1';
-    const params = [req.session.userId];
-
-    if (search && search.trim()) {
-      query += ' AND (title ILIKE $2 OR notes ILIKE $3 OR location ILIKE $4)';
-      const searchTerm = '%' + search.trim() + '%';
-      params.push(searchTerm, searchTerm, searchTerm);
-    }
-
-    query += ' ORDER BY datetime DESC';
-
-    const result = await pool.query(query, params);
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Error fetching transactions:', error);
-    res.status(500).json({ error: 'Failed to fetch transactions' });
-  }
-});
+router.get("/", requireAuth, getTransactions);
 
 // Get single transaction by ID
 router.get('/:id', requireAuth, async (req, res) => {
