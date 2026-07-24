@@ -3,6 +3,7 @@ require('dotenv').config();
 //import new modules
 const pool = require("./config/db");
 const cloudinary = require("./config/cloudinary");
+const { upload, uploadToCloudinary } = require("./config/upload");
 const { requireAuth } = require("./middleware/auth");
 
 //old import statements
@@ -11,37 +12,13 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 
 const bcrypt = require('bcrypt');
-
-const multer = require('multer');
-const path = require('path');
-const stream = require('stream');
+const path = require("path");
 
 const app = express();
 app.set('trust proxy', 1);
 
-
-
-// Configure multer for in-memory storage (for Cloudinary upload)
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const ext = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mime = allowedTypes.test(file.mimetype);
-    if (ext && mime) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'));
-    }
-  }
-});
-
 //temp
 console.log(process.env.DATABASE_URL);
-
-
 
 // Create tables on startup
 async function initDB() {
@@ -121,29 +98,6 @@ app.use(session({
     maxAge: 7 * 24 * 60 * 60 * 1000
   }
 }));
-
-// Upload image to Cloudinary
-async function uploadToCloudinary(file) {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: 'transactions' },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve({
-            url: result.secure_url,
-            public_id: result.public_id
-          });
-        }
-      }
-    );
-
-    const bufferStream = new stream.PassThrough();
-    bufferStream.end(file.buffer);
-    bufferStream.pipe(uploadStream);
-  });
-}
 
 // Delete image from Cloudinary
 async function deleteFromCloudinary(publicId) {
