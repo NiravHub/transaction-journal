@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const pool = require("../config/db");
 const { requireAuth } = require("../middleware/auth");
+const { getProfile } = require("../controllers/authController");
 
 // Register
 router.post('/register', async (req, res) => {
@@ -91,4 +92,5 @@ router.get('/me', requireAuth, async (req, res) => {
   }
 });
 
+router.get("/profile", requireAuth, getProfile);
 module.exports = router;
