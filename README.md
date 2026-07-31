@@ -158,12 +158,10 @@ Add screenshots here:
 ## 🔮 Future Improvements
 
 - Settings Page
-- Export CSV
-- Export PDF
+- Export CSV/PDF
 - PWA Support
 - Analytics Dashboard
 - Monthly Reports
-- Dark/Light Theme
 
 ---
 
