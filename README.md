@@ -57,20 +57,42 @@ Transaction Journal helps you securely store and organize your daily financial t
 ## 📂 Project Structure
 
 ```text
+## 📂 Project Structure
+
+```text
 transaction-journal/
 │
 ├── controllers/
+│   ├── authController.js
+│   └── transactionController.js
+│
 ├── middleware/
+│   └── auth.js
+│
 ├── public/
 │   ├── css/
+│   ├── images/
 │   ├── js/
-│   └── uploads/
+│   ├── about.html
+│   ├── index.html
+│   ├── login.html
+│   ├── profile.html
+│   └── register.html
+│
 ├── routes/
+│   ├── auth.js
+│   └── transactions.js
+│
+├── uploads/
+│
 ├── validators/
-├── utils/
-├── db/
+│   └── transactionValidator.js
+│
+├── .env
+├── .gitignore
 ├── index.js
 ├── package.json
+├── package-lock.json
 └── README.md
 ```
 
