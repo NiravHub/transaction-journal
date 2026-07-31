@@ -1,68 +1,42 @@
-# 💳 Transaction Journal
+# 💰 Transaction Journal
 
-A modern web application to record, organize, and manage personal transactions with notes, screenshots, payment methods, and location details.
+A modern personal transaction management web application built with **Node.js, Express, PostgreSQL, and Cloudinary**.
 
-Instead of searching through screenshots, bank statements, or payment apps, Transaction Journal lets you save everything related to a transaction in one place.
+Transaction Journal helps you securely store and organize your daily financial transactions with receipt images, notes, payment methods, and locations.
 
 ---
 
 ## ✨ Features
 
-- 📊 Dashboard with transaction statistics
-- ➕ Dedicated Add Transaction page
-- 📜 View transactions grouped by month
-- 🔍 Search transactions instantly
-- 📝 Add notes for every transaction
-- 📷 Upload payment screenshots/receipts
-- 💳 Store payment method
-- 📍 Save transaction location
-- 👤 User authentication
-- 📱 Responsive modern UI
-- ☁️ Cloudinary image storage
-- 🗄️ PostgreSQL database
-
----
-
-## 🖼️ Pages
-
-### Dashboard
-- Overview of your account
-- Total transactions
-- Total amount spent
-- Quick navigation
-
-### Add Transaction
-Record a new transaction with:
-- Title
-- Amount
-- Date & Time
-- Payment Method
-- Location
-- Notes
-- Receipt Screenshot
-
-### Transactions
-- Month-wise grouping
-- Search by title, notes or location
-- View complete transaction details
-- Edit/Delete transactions
-
-### Profile
-- User information
-- Member since
-- Account details
-
-### About
-Information about the application and its purpose.
+- 🔐 User Authentication
+- 📊 Modern Dashboard
+- ➕ Add Transactions
+- ✏️ Edit Transactions
+- 🗑️ Delete Transactions
+- 📷 Upload Receipt Images
+- ☁️ Cloudinary Image Storage
+- 📍 Store Transaction Location
+- 📝 Notes for Every Transaction
+- 💳 Payment Method Tracking
+- 🔍 Search Transactions
+- 🎯 Advanced Filters
+  - Transaction Type
+  - Payment Method
+  - Month
+  - Year
+- 📈 Payment Method Summary
+- 👤 User Profile
+- ℹ️ About Page
+- 📱 Responsive Design
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- HTML
-- CSS
-- Vanilla JavaScript
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
 
 ### Backend
 - Node.js
@@ -78,13 +52,31 @@ Information about the application and its purpose.
 - Express Session
 - bcrypt
 
-### Deployment
-- Railway
-- GitHub
+---
+
+## 📂 Project Structure
+
+```text
+transaction-journal/
+│
+├── controllers/
+├── middleware/
+├── public/
+│   ├── css/
+│   ├── js/
+│   └── uploads/
+├── routes/
+├── validators/
+├── utils/
+├── db/
+├── index.js
+├── package.json
+└── README.md
+```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Installation
 
 ### Clone the repository
 
@@ -92,7 +84,7 @@ Information about the application and its purpose.
 git clone https://github.com/NiravHub/transaction-journal.git
 ```
 
-### Go into the project
+### Open project
 
 ```bash
 cd transaction-journal
@@ -104,13 +96,15 @@ cd transaction-journal
 npm install
 ```
 
-### Create a `.env` file
+### Create `.env`
 
 ```env
 DATABASE_URL=your_database_url
 
 CLOUDINARY_CLOUD_NAME=your_cloud_name
+
 CLOUDINARY_API_KEY=your_api_key
+
 CLOUDINARY_API_SECRET=your_api_secret
 
 SESSION_SECRET=your_secret
@@ -122,62 +116,35 @@ SESSION_SECRET=your_secret
 npm start
 ```
 
-Open:
+Open your browser and visit:
 
-```
+```text
 http://localhost:3000
 ```
 
 ---
 
-## 📂 Project Structure
+## 📸 Screenshots
 
-```
-transaction-journal/
-│
-├── public/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   ├── profile.html
-│   └── about.html
-│
-├── index.js
-├── package.json
-├── .env
-└── README.md
-```
+Add screenshots here:
 
----
-
-## 💡 Why I Built This
-
-Many payments are forgotten after a few days.
-
-I wanted a simple application where I could store:
-
-- transaction details
-- payment screenshots
-- notes
-- locations
-- payment methods
-
-Everything stays organized and can be searched later instead of scrolling through gallery screenshots or payment history.
+- Login
+- Dashboard
+- Add Transaction
+- Transactions
+- Profile
 
 ---
 
 ## 🔮 Future Improvements
 
-- 💸 Spent / Received transaction types
-- 📈 Income vs Expense dashboard
-- 📊 Charts & Analytics
-- 📅 Calendar view
-- 🏷️ Categories
-- 📤 Export to PDF/Excel
-- 🔔 Payment reminders
-- 🌙 Dark/Light mode
-- 📱 Progressive Web App (PWA)
-- 👥 Multi-user support
+- Settings Page
+- Export CSV
+- Export PDF
+- PWA Support
+- Analytics Dashboard
+- Monthly Reports
+- Dark/Light Theme
 
 ---
 
@@ -185,10 +152,23 @@ Everything stays organized and can be searched later instead of scrolling throug
 
 **Nirav Panwala**
 
-GitHub: https://github.com/NiravHub
+GitHub:  
+https://github.com/NiravHub
 
 ---
 
 ## ⭐ Support
 
 If you like this project, consider giving it a ⭐ on GitHub.
+
+---
+
+## 📌 Recommended Additions
+
+Since this is becoming a portfolio-quality project, consider adding:
+
+- 📸 Screenshots (Login, Dashboard, Add Transaction, Transactions, Profile)
+- 🎥 A short GIF demonstrating the application
+- 🌐 Live Demo link (after deployment)
+
+These additions will make the repository more attractive for recruiters, collaborators, and GitHub visitors.
