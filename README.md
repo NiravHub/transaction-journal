@@ -56,10 +56,7 @@ Transaction Journal helps you securely store and organize your daily financial t
 
 ## 📂 Project Structure
 
-```text
-## 📂 Project Structure
-
-```text
+```
 transaction-journal/
 │
 ├── controllers/
