@@ -181,13 +181,3 @@ https://github.com/NiravHub
 If you like this project, consider giving it a ⭐ on GitHub.
 
 ---
-
-## 📌 Recommended Additions
-
-Since this is becoming a portfolio-quality project, consider adding:
-
-- 📸 Screenshots (Login, Dashboard, Add Transaction, Transactions, Profile)
-- 🎥 A short GIF demonstrating the application
-- 🌐 Live Demo link (after deployment)
-
-These additions will make the repository more attractive for recruiters, collaborators, and GitHub visitors.
