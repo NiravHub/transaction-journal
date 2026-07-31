@@ -12,17 +12,65 @@ async function getProfile(req, res) {
     }
 
     const statsResult = await pool.query(
-      "SELECT COUNT(*) as count, COALESCE(SUM(amount),0) as total FROM transactions WHERE user_id = $1",
-      [req.session.userId]
-    );
+  `
+  SELECT
+    COUNT(*) AS count,
+
+    COALESCE(
+        SUM(
+            CASE
+                WHEN transaction_type = 'spent'
+                THEN amount
+                ELSE 0
+            END
+        ),
+        0
+    ) AS total_spent,
+
+    COALESCE(
+        SUM(
+            CASE
+                WHEN transaction_type = 'received'
+                THEN amount
+                ELSE 0
+            END
+        ),
+        0
+    ) AS total_received
+
+FROM transactions
+WHERE user_id = $1;
+  `,
+  [req.session.userId]
+);
+
+const paymentMethodResult = await pool.query(
+  `
+  SELECT
+    payment_method,
+    SUM(amount) AS total_amount,
+    COUNT(*) AS transaction_count
+  FROM transactions
+  WHERE
+    user_id = $1
+    AND transaction_type = 'spent'
+  GROUP BY payment_method
+  ORDER BY total_amount DESC;
+  `,
+  [req.session.userId]
+);
 
     res.json({
-      user: userResult.rows[0],
-      stats: {
-        transactionCount: parseInt(statsResult.rows[0].count),
-        totalSpent: parseFloat(statsResult.rows[0].total),
-      },
-    });
+  user: userResult.rows[0],
+
+  stats: {
+    transactionCount: parseInt(statsResult.rows[0].count),
+    totalSpent: parseFloat(statsResult.rows[0].total_spent),
+    totalReceived: parseFloat(statsResult.rows[0].total_received),
+  },
+
+  paymentMethods: paymentMethodResult.rows,
+});
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).json({ error: "Failed to fetch profile" });
