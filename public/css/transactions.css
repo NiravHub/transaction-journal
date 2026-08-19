@@ -1,0 +1,245 @@
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.transaction-filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.transaction-filters select {
+  height: 48px;
+  min-width: 145px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.25s;
+  backdrop-filter: blur(12px);
+}
+
+.transaction-filters select:hover {
+  border-color: #4f8cff;
+}
+
+.transaction-filters select:focus {
+  outline: none;
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.18);
+}
+
+.transaction-filters option {
+  background: #22243a;
+  color: #fff;
+}
+
+#clearFiltersBtn {
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 14px;
+}
+
+.transaction-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 18px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.transaction-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  border-color: var(--accent);
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.transaction-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.transaction-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.transaction-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 10px;
+}
+
+.transaction-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.transaction-meta .payment-badge {
+  display: inline-flex;
+  width: fit-content;
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-value .payment-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.payment-badge.gpay {
+  background-color: var(--gpay-color);
+  color: white;
+}
+.payment-badge.phonepe {
+  background-color: var(--phonepe-color);
+  color: white;
+}
+.payment-badge.paytm {
+  background-color: var(--paytm-color);
+  color: white;
+}
+.payment-badge.bhim {
+  background-color: var(--bhim-color);
+  color: white;
+}
+.payment-badge.other {
+  background-color: var(--other-color);
+  color: white;
+}
+
+.payment-badge.fallback {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.type-badge.spent {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.type-badge.received {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.month-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.month-heading {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-state h2 {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.filter-search {
+  flex: 1;
+  min-width: 400px;
+  max-width: 520px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-clear-btn {
+  height: 48px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.filter-clear-btn:hover {
+  border-color: #4f8cff;
+  transform: translateY(-2px);
+}
